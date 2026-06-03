@@ -16,13 +16,7 @@ namespace Sonic853.SRT
         static Regex RegexSubtitle() => new Regex(Pattern());
         static Regex RegexSub() => new Regex(SubPattern());
         [SerializeField] private SRTSubtitle[] sRTSubtitles;
-        public SRTSubtitle[] SRTSubtitles
-        {
-            get
-            {
-                return sRTSubtitles;
-            }
-        }
+        public SRTSubtitle[] SRTSubtitles => sRTSubtitles;
         void Start()
         {
             for (int i = 0; i < sRTSubtitles.Length; i++)
@@ -33,7 +27,9 @@ namespace Sonic853.SRT
                 || sRTSubtitle.subtitleTimeEnd.Length == 0
                 || sRTSubtitle.subtitleText.Length == 0
                 )
+                {
                     ReadSRTFile(ref sRTSubtitle);
+                }
             }
         }
         public static void ReadSRTFile(ref SRTSubtitle sRTSubtitle)
@@ -55,26 +51,29 @@ namespace Sonic853.SRT
             var subtitleTimeStartList = new DataList();
             var subtitleTimeEndList = new DataList();
             var subtitleTextList = new DataList();
+            var lineTimeList = new DataList();
             for (int i = 0; i < matches.Count; i++)
             {
                 var match = matches[i];
                 var timeStart = ParseTime(match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value, match.Groups[5].Value);
                 var timeEnd = ParseTime(match.Groups[6].Value, match.Groups[7].Value, match.Groups[8].Value, match.Groups[9].Value);
                 var text = match.Groups[11].Value;
-                subtitleTimeStartList.Add(timeStart);
-                subtitleTimeEndList.Add(timeEnd);
-                subtitleTextList.Add(text);
+                var index = FloatArrayFindMax(subtitleTimeStartList, timeStart);
+                subtitleTimeStartList.Insert(index, timeStart);
+                subtitleTimeEndList.Insert(index, timeEnd);
+                subtitleTextList.Insert(index, text);
+                lineTimeList.Insert(index, timeEnd - timeStart);
             }
             var subtitleTimeStart = new float[subtitleTimeStartList.Count];
             var subtitleTimeEnd = new float[subtitleTimeEndList.Count];
             var subtitleText = new string[subtitleTextList.Count];
-            var lineTime = new float[subtitleTimeStartList.Count];
+            var lineTime = new float[lineTimeList.Count];
             for (int i = 0; i < subtitleTimeStartList.Count; i++)
             {
-                var timeStart = subtitleTimeStart[i] = subtitleTimeStartList[i].Float;
-                var timeEnd = subtitleTimeEnd[i] = subtitleTimeEndList[i].Float;
+                subtitleTimeStart[i] = subtitleTimeStartList[i].Float;
+                subtitleTimeEnd[i] = subtitleTimeEndList[i].Float;
                 subtitleText[i] = subtitleTextList[i].String;
-                lineTime[i] = timeEnd - timeStart;
+                lineTime[i] = lineTimeList[i].Float;
             }
             sRTSubtitle.subtitleTimeStart = subtitleTimeStart;
             sRTSubtitle.subtitleTimeEnd = subtitleTimeEnd;
@@ -84,6 +83,30 @@ namespace Sonic853.SRT
         public static float ParseTime(string hour, string minute, string second, string millisecond)
         {
             return float.Parse(hour ?? "0") * 3600 + float.Parse(minute ?? "0") * 60 + float.Parse(second ?? "0") + float.Parse(millisecond ?? "0") / 1000;
+        }
+        /// <summary>
+        /// 在int数组中从0开始查找比number大的最小值
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        static int FloatArrayFindMax(DataList array, float number)
+        {
+            if (array.Count == 0) return 0;
+            for (int i = 0; i < array.Count; i++)
+            {
+                var data = array[i].Float;
+                if (data > number)
+                {
+                    return i;
+                }
+            }
+            return array.Count - 1;
+        }
+        public string[] GetTextIndex(int _index, float time, float offset = 0f)
+        {
+            if (sRTSubtitles.Length <= _index) return new string[0];
+            return sRTSubtitles[_index].GetText(time, offset);
         }
     }
 }
