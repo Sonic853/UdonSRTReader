@@ -9,9 +9,10 @@ namespace Sonic853.SRT
 {
     public class SRTSubtitle : UdonSharpBehaviour
     {
+        public TextAsset srtFile;
         [TextArea(3, 10)]
-        [SerializeField] public TextAsset srtFile;
-        [SerializeField] public string srtString;
+        public string srtString;
+        public VRCUrl videoUrl;
         [TextArea(3, 10)]
         public string[] subtitleText = new string[0];
         public float[] subtitleTimeStart = new float[0];

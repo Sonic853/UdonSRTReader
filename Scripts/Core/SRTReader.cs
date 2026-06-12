@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Text.RegularExpressions;
 using UdonSharp;
 using UnityEngine;
@@ -10,6 +11,11 @@ namespace Sonic853.SRT
 {
     public class SRTReader : UdonSharpBehaviour
     {
+        public static SRTReader Instance()
+        {
+            return (SRTReader)GameObject.Find("Sonic853.SRTReader").GetComponent(typeof(UdonBehaviour));
+        }
+        bool isLoaded = false;
         // static string Pattern() => @"(\d+)?\n(\d{1,}:)?(\d{1,}:)?(\d{1,}).(\d+)\s?-->\s?(\d{1,}:)?(\d{1,}:)?(\d{1,}).(\d+)(.*(?:\r?(?!\r?).*)*)\n(.*(?:\r?\n(?!\r?\n).*)*)";
         static string Pattern() => @"(\d+)?\n(?:(\d{1,})?:)?(?:(\d{1,})?:)?(\d{1,}).(\d+)\s?-->\s?(?:(\d{1,})?:)?(?:(\d{1,})?:)?(\d{1,}).(\d+)(.*(?:\r?(?!\r?).*)*)\n(.*(?:\r?\n(?!\r?\n).*)*)";
         static string SubPattern() => @"(?:(\d+)?\n)?(?:(\d{1,})?:)?(?:(\d{1,})?:)?(\d{1,}).(\d+)\s?,\s?(?:(\d{1,})?:)?(?:(\d{1,})?:)?(\d{1,}).(\d+)(.*(?:\r?(?!\r?).*)*)\n(.*(?:\r?\n(?!\r?\n).*)*)";
@@ -17,13 +23,19 @@ namespace Sonic853.SRT
         static Regex RegexSub() => new Regex(SubPattern());
         [SerializeField] private SRTSubtitle[] sRTSubtitles;
         public SRTSubtitle[] SRTSubtitles => sRTSubtitles;
+        [SerializeField] SRTSubtitle sRTSubtitlePrefab;
         void Start()
+        {
+            LoadSRTFiles();
+        }
+        public void LoadSRTFiles(bool force = false)
         {
             for (int i = 0; i < sRTSubtitles.Length; i++)
             {
                 var sRTSubtitle = sRTSubtitles[i];
                 if (
-                sRTSubtitle.subtitleTimeStart.Length == 0
+                force
+                || sRTSubtitle.subtitleTimeStart.Length == 0
                 || sRTSubtitle.subtitleTimeEnd.Length == 0
                 || sRTSubtitle.subtitleText.Length == 0
                 )
@@ -31,6 +43,7 @@ namespace Sonic853.SRT
                     ReadSRTFile(ref sRTSubtitle);
                 }
             }
+            isLoaded = true;
         }
         public static void ReadSRTFile(ref SRTSubtitle sRTSubtitle)
         {
@@ -40,7 +53,7 @@ namespace Sonic853.SRT
             {
                 return;
             }
-            if (!string.IsNullOrEmpty(srtString)) srtString = srtFile.text;
+            if (string.IsNullOrEmpty(srtString)) sRTSubtitle.srtString = srtString = srtFile.text;
             var regexSubtitle = RegexSubtitle();
             var matches = regexSubtitle.Matches(srtString);
             if (matches.Count == 0)
@@ -80,7 +93,46 @@ namespace Sonic853.SRT
             sRTSubtitle.subtitleText = subtitleText;
             sRTSubtitle.lineTime = lineTime;
         }
-        public static float ParseTime(string hour, string minute, string second, string millisecond)
+        public SRTSubtitle GetSRTSubtitle(VRCUrl videoUrl)
+        {
+            if (videoUrl == null) return null;
+            var videoUrlString = videoUrl.ToString();
+            if (string.IsNullOrEmpty(videoUrlString)) return null;
+            foreach (var sRTSubtitle in sRTSubtitles)
+            {
+                if (sRTSubtitle.videoUrl == null) continue;
+                if (sRTSubtitle.videoUrl.ToString() == videoUrlString)
+                {
+                    return sRTSubtitle;
+                }
+            }
+            return null;
+        }
+        public SRTSubtitle AddSRTSubtitle(string srtString, VRCUrl videoUrl = null)
+        {
+            if (string.IsNullOrEmpty(srtString)) return null;
+            foreach (var sTRS in sRTSubtitles)
+            {
+                if (sTRS.srtString == srtString)
+                {
+                    return sTRS;
+                }
+            }
+            var sRTSubtitleObject = Instantiate(sRTSubtitlePrefab.gameObject);
+            sRTSubtitleObject.SetActive(true);
+            sRTSubtitleObject.transform.parent = sRTSubtitlePrefab.transform.parent;
+            var sRTSubtitle = (SRTSubtitle)sRTSubtitleObject.GetComponent(typeof(UdonBehaviour));
+            sRTSubtitle.srtString = srtString;
+            sRTSubtitle.videoUrl = videoUrl;
+            ReadSRTFile(ref sRTSubtitle);
+            var sRTSubtitlesLength = sRTSubtitles.Length;
+            var _sRTSubtitles = new SRTSubtitle[sRTSubtitlesLength + 1];
+            Array.Copy(sRTSubtitles, _sRTSubtitles, sRTSubtitlesLength);
+            _sRTSubtitles[sRTSubtitlesLength] = sRTSubtitle;
+            sRTSubtitles = _sRTSubtitles;
+            return sRTSubtitle;
+        }
+        static float ParseTime(string hour, string minute, string second, string millisecond)
         {
             return float.Parse(hour ?? "0") * 3600 + float.Parse(minute ?? "0") * 60 + float.Parse(second ?? "0") + float.Parse(millisecond ?? "0") / 1000;
         }
