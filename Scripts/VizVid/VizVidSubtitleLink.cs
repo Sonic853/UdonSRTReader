@@ -22,13 +22,24 @@ namespace Sonic853.SRT.VizVid
         }
         public void _onVideoStart()
         {
+            // Debug.Log("[VizVidSubtitleLink] _onVideoStart");
+            if (subtitleUI.sRTReader != null)
+            {
+                var subtitle = subtitleUI.sRTReader.GetSRTSubtitle(vizVidCore.Url);
+                if (subtitle != null)
+                {
+                    subtitleUI.targetSubtitle = subtitle;
+                }
+            }
             enabled = true;
+            subtitleUI.ClearText();
             subtitleUI.enabled = true;
         }
         public void _onVideoEnd()
         {
+            // Debug.Log("[VizVidSubtitleLink] _onVideoEnd");
             subtitleUI.enabled = false;
-            subtitleUI.subtitleDisplay.SetActive(false);
+            subtitleUI.ClearText();
             enabled = false;
         }
     }

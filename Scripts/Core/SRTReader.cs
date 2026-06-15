@@ -26,7 +26,7 @@ namespace Sonic853.SRT
         [SerializeField] SRTSubtitle sRTSubtitlePrefab;
         void Start()
         {
-            LoadSRTFiles();
+            LoadSRTFiles(true);
         }
         public void LoadSRTFiles(bool force = false)
         {

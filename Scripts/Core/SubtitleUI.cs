@@ -34,12 +34,26 @@ namespace Sonic853.SRT
                 subtitleTMP.text = subtitleText;
                 if (subtitleDisplay == null) subtitleDisplay = subtitleTMP.gameObject;
             }
-            else if (subtitle != null)
+            if (subtitle != null)
             {
                 subtitle.text = subtitleText;
                 if (subtitleDisplay == null) subtitleDisplay = subtitle.gameObject;
             }
             subtitleDisplay.SetActive(!string.IsNullOrEmpty(subtitleText));
+        }
+        public void ClearText()
+        {
+            if (subtitleTMP != null)
+            {
+                subtitleTMP.text = "";
+                if (subtitleDisplay == null) subtitleDisplay = subtitleTMP.gameObject;
+            }
+            if (subtitle != null)
+            {
+                subtitle.text = "";
+                if (subtitleDisplay == null) subtitleDisplay = subtitle.gameObject;
+            }
+            subtitleDisplay.SetActive(false);
         }
     }
 }
