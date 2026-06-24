@@ -32,8 +32,7 @@ namespace Sonic853.SRT
                 enabled = false;
                 return;
             }
-            if (targetSubtitle == null) { return; }
-            if (lastTime == time) return;
+            if (targetSubtitle == null || lastTime == time) { return; }
             lastTime = time;
             var subtitleText = string.Join("\n", targetSubtitle.GetText(time));
             if (subtitleTMP != null)
