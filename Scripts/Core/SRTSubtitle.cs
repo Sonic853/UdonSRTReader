@@ -5,7 +5,7 @@ using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace Sonic853.SRT
+namespace Sonic853.Subtitle
 {
     public class SRTSubtitle : UdonSharpBehaviour
     {

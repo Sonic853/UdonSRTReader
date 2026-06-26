@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using System;
 using TMPro;
 
-namespace Sonic853.SRT
+namespace Sonic853.Subtitle
 {
     public class SubtitleUI : UdonSharpBehaviour
     {

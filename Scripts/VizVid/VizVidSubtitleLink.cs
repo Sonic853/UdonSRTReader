@@ -5,7 +5,7 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace Sonic853.SRT.VizVid
+namespace Sonic853.Subtitle.VizVid
 {
     public class VizVidSubtitleLink : UdonSharpBehaviour
     {
