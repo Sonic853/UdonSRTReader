@@ -32,7 +32,7 @@ namespace Sonic853.Subtitle
         {
             if (subtitle == null && subtitleTMP == null)
             {
-                Debug.LogWarning("[Sonic853.SRT.SubtitleUI.Update] No subtitle component found");
+                Debug.LogWarning("[Sonic853.Subtitle.SubtitleUI.Update] No subtitle component found");
                 enabled = false;
                 return;
             }

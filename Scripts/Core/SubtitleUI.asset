@@ -20,7 +20,7 @@ MonoBehaviour:
   compiledVersion: 2
   behaviourSyncMode: 0
   hasInteractEvent: 0
-  scriptID: -3264518641765723922
+  scriptID: 2795188285800685097
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -61,7 +61,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: Sonic853.SRT.SRTReader, Sonic853.SRTReader
+      Data: Sonic853.Subtitle.SRTReader, Sonic853.SRTReader
     - Name: 
       Entry: 8
       Data: 
@@ -121,7 +121,7 @@ MonoBehaviour:
       Data: 7|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: Sonic853.SRT.SRTSubtitle, Sonic853.SRTReader
+      Data: Sonic853.Subtitle.SRTSubtitle, Sonic853.SRTReader
     - Name: 
       Entry: 8
       Data: 
