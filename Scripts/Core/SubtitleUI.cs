@@ -42,11 +42,13 @@ namespace Sonic853.Subtitle
             var subtitleText = string.Join("\n", targetSubtitle.GetText(time));
             if (subtitleTMP != null)
             {
+                if (subtitleTMP.text == subtitleText) { return; }
                 subtitleTMP.text = subtitleText;
                 if (subtitleDisplay == null) subtitleDisplay = subtitleTMP.gameObject;
             }
             if (subtitle != null)
             {
+                if (subtitle.text == subtitleText) { return; }
                 subtitle.text = subtitleText;
                 if (subtitleDisplay == null) subtitleDisplay = subtitle.gameObject;
             }
