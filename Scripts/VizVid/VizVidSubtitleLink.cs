@@ -23,7 +23,7 @@ namespace Sonic853.SRT.VizVid
                 enabled = false;
                 return;
             }
-            subtitleUI.time = vizVidCore.Time;
+            subtitleUI.UpdateText(vizVidCore.Time);
         }
         public void _onVideoStart()
         {
@@ -34,7 +34,7 @@ namespace Sonic853.SRT.VizVid
                 return;
             }
             enabled = true;
-            subtitleUI.Show(vizVidCore.Url);
+            subtitleUI.Show(vizVidCore.Url, false);
         }
         public void _onVideoEnd()
         {

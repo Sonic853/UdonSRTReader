@@ -26,12 +26,17 @@ namespace Sonic853.SRT
 
         void Update()
         {
+            UpdateText(time);
+        }
+        public void UpdateText(float _currentTime)
+        {
             if (subtitle == null && subtitleTMP == null)
             {
                 Debug.LogWarning("[Sonic853.SRT.SubtitleUI.Update] No subtitle component found");
                 enabled = false;
                 return;
             }
+            time = _currentTime;
             if (targetSubtitle == null || lastTime == time) { return; }
             lastTime = time;
             var subtitleText = string.Join("\n", targetSubtitle.GetText(time));
@@ -47,7 +52,7 @@ namespace Sonic853.SRT
             }
             subtitleDisplay.SetActive(!string.IsNullOrEmpty(subtitleText));
         }
-        public void Show(VRCUrl url)
+        public void Show(VRCUrl url, bool enableUpdate = true)
         {
             if (sRTReader != null && autoSelect)
             {
@@ -58,7 +63,7 @@ namespace Sonic853.SRT
                 }
             }
             ClearText();
-            enabled = true;
+            enabled = enableUpdate;
         }
         public void Hide()
         {
