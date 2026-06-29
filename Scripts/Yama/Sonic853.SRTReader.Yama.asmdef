@@ -1,12 +1,11 @@
 {
-    "name": "Sonic853.SRTReader.VizVid",
+    "name": "Sonic853.SRTReader.Yama",
     "rootNamespace": "",
     "references": [
         "VRC.Udon",
         "UdonSharp.Runtime",
         "Sonic853.SRTReader",
-        "JLChnToZ.VVMW",
-        "JLChnToZ.VRC.Foundation"
+        "Yamadev.YamaStream.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

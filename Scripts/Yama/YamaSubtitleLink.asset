@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
-  m_Name: VizVidSubtitleLink
+  m_Name: YamaSubtitleLink
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 6d70b2029e6dd7546a31edb834e6be54, type: 2}
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 85858af358f5ebc48a73e4dd4ba4fe08, type: 2}
   udonAssembly: 
   assemblyError: 
-  sourceCsScript: {fileID: 11500000, guid: 0483ceaa5fb90584a94ff6cc422040a7, type: 3}
+  sourceCsScript: {fileID: 11500000, guid: d672c157a36bd9249a1ad37078c176c0, type: 3}
   scriptVersion: 2
   compiledVersion: 2
   behaviourSyncMode: 0
   hasInteractEvent: 0
-  scriptID: 2959614308630858735
+  scriptID: 7352934155218931530
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -61,7 +61,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: JLChnToZ.VRC.VVMW.Core, JLChnToZ.VVMW
+      Data: Yamadev.YamaStream.Controller, Yamadev.YamaStream.Runtime
     - Name: 
       Entry: 8
       Data: 
