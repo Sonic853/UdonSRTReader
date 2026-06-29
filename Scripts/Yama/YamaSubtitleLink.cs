@@ -7,7 +7,7 @@ using Yamadev.YamaStream;
 
 namespace Sonic853.Subtitle.Yama
 {
-    public class YamaSubtitleLink : Listener
+    public class YamaSubtitleLink : YamaPlayerListener
     {
         public Controller videoCore;
         public SubtitleUI subtitleUI;
@@ -32,7 +32,7 @@ namespace Sonic853.Subtitle.Yama
                 return;
             }
             enabled = true;
-            var currentUrl = videoCore.Track.GetVRCUrl();
+            var currentUrl = TrackUtils.GetUrl(videoCore.Track);
             subtitleUI.Show(currentUrl, false);
         }
         public override void OnVideoEnd()
